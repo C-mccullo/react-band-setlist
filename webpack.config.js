@@ -21,13 +21,13 @@ config = {
       // JS
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: [ /node_modules/, "index.1.js"],
         include: path.join(__dirname, "src"),
         loader: "babel-loader"
       },
       // STYLES
       {
-        // apply for .scss and .css files
+        // apply loaders to .scss and .css files
         test: /\.(s*)css$/,
         include: path.join(__dirname, "src"),
         loader: ["style-loader", "css-loader", "sass-loader"]
@@ -50,11 +50,11 @@ if (process.env.NODE_ENV === 'production') {
   module.exports.plugins.push(
     // if environment is production, call uglify plugin and 
     new webpack.optimize.UglifyJsPlugin(),
-    // new OptimizeCSSAssets({
-    //   cssProcessor: require("cssnano"),
-    //   cssProcessorOptions: {
-    //     discardComments: { removeAll: true }
-    //   }
-    // }) 
+    new OptimizeCSSAssets({
+      cssProcessor: require("cssnano"),
+      cssProcessorOptions: {
+        discardComments: { removeAll: true }
+      }
+    }) 
   );
 }

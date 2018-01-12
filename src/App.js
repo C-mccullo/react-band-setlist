@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Firebase, { Auth, Provider } from './firebase';
 
-import ReqAuth from "./components/requireAuth";
+import ReqAuth from "./components/common/requireAuth";
 import LoginModal from "./components/login/loginModal";
-import Header from "./components/header";
+import Header from "./components/common/header";
 import NewSetListForm from './components/setListForm/newSetListForm';
 import AllSetLists from './components/allSetLists/allSetLists';
 import GenerateNewList from './components/setListGenerator/generateNewList';
-import NotFound from './components/notFound';
-import Footer from './components/footer';
+import NotFound from './components/common/notFound';
+import Footer from './components/common/footer';
 
 // import 'react-skeleton-css/styles/skeleton.2.0.4.css';
 import './App.scss';
@@ -104,7 +104,6 @@ class App extends Component {
     }
     setListsRef.push(list);
     countRef.set(newCount);
-    this.setState({ setLists: updateSetLists, count: newCount });
   }
 
   deleteSetList(list) {
@@ -155,7 +154,7 @@ class App extends Component {
           <Route path="/login"
             render={ (props) => <LoginModal currentUser={ this.state.currentUser } login={ this.login } logout={ this.logout } /> }
           />
-          <Route render={ ()=> <NotFound/> }/>
+          <Route path="/*" render={ ()=> <NotFound/> }/>
         </Switch>
         
         <Footer/>

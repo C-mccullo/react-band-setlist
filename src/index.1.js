@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Router from './router';
+import App from './App.1';
 import { Provider } from 'react-redux';
-import { createStore, compose } from 'redux';
-import { thunk } from 'redux-thunk';
+import { createStore, compose, applyMiddleware } from 'redux';
+import thunkMiddleware from 'redux-thunk';
 import rootReducer from './rootReducer';
-
-import './index.scss';
 
 const defaultState = {
 	// setLists: [
@@ -23,14 +22,20 @@ const defaultState = {
 }
 
 const store = createStore(rootReducer, defaultState, compose(
-	applyMiddleware(thunk),
+	applyMiddleware(thunkMiddleware),
 	window.devToolsExtension ? window.devToolsExtension() : f => f
 ));
 
+const Root = ({store}) => {
+	return (
+		<Provider store={store}>
+			<Router/>
+		</Provider>
+	)
+}
+
 ReactDOM.render(
-	<Provider store={ store }>
-		<Router/> 
-	</Provider>,
+	<Root store={ store }/>,
 	document.getElementById('root')
 );
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import './singleSetList.css';
+import './singleSetList.scss';
 
 function SingleSetList(props) {
 	const setList = props.setList;

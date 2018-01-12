@@ -28,7 +28,7 @@ const Header = (props) => {
 							{ props.count ? <span className="link_notificationBadge">{props.count}</span> : ""}
 						</NavLink>
 					</li>
-					<li><NavLink activeClassName="current" to="/generatelist">Make new list</NavLink></li>
+					{/* <li><NavLink activeClassName="current" to="/generatelist">Make new list</NavLink></li> */}
 					<li><NavLink activeClassName="current" to="/login">Log in</NavLink></li>
 				</ul>
 			</nav>

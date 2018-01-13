@@ -5,7 +5,7 @@ const OptimizeCSSAssets = require("optimize-css-assets-webpack-plugin");
 
 config = {
   // location of webpack entry js file
-  entry: "./src/index.1.js",
+  entry: "./src/index.js",
   output: {
     // name of output file
     filename: "bundle.js",
@@ -21,7 +21,7 @@ config = {
       // JS
       {
         test: /\.js$/,
-        exclude: [ /node_modules/, "index.js"],
+        exclude: [ /node_modules/, "index.1.js"],
         include: path.join(__dirname, "src"),
         loader: "babel-loader"
       },

@@ -6,29 +6,31 @@ import * as setListActions from "./actions";
 import * as setListFormActions from "../setListForm/actions";
 
 class AllSetLists extends React.Component {
+	constructor(props) {
+		super(props)
+	}
 
 	componentDidMount() {
-		// this.props.actions.resetCount();
+		// this.props.actions.fetchSetLists();
 	}
 
 	render() {
-		const setLists = this.props.setLists;
-		console.log(setLists);
+		console.log("setLists in component", this.props.setLists);
 		return (
 			<div>
 				<h3>New Lists</h3>
 				<section className="columns">
-				{/* { 
-					setLists.map((setList, id) => {
+				{ 
+					this.props.setLists.map((setList, id) => {
 						return (
 							<SingleSetList key={id}
 								id={id} 
 								useSetList={ this.props.actions.useSetList } 
-								setList={ setLists[id] }
+								setList={ this.props.setLists[id] }
 								deleteList={ this.props.actions.deleteList }/>
 						)
 					}) 
-				} */}
+				}
 				</section>
 			</div>
 		)
@@ -37,16 +39,19 @@ class AllSetLists extends React.Component {
 
 function mapStateToProps(state) {
 	return {
-		setLists: state.setLists	
+		setLists: state.setLists.setLists	
 	}
 }
 
 function mapDispatchToProps(dispatch) {
-	actions: bindActionCreators({
-		resetCount: setListFormActions.resetCount,
-		useSetList: setListActions.useSetList,
-		fetchSetLists: setListActions.fetchSetLists
-	})
+	return {
+		actions: bindActionCreators({
+			resetCount: setListFormActions.resetCount,
+			useSetList: setListActions.useSetList,
+			fetchSetLists: setListActions.fetchSetLists,
+			deleteList: setListActions.deleteSetList
+		}, dispatch)
+	}
 }
 
 export default connect(

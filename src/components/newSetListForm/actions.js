@@ -37,15 +37,19 @@ export function resetCount() {
   return dispatch => countRef.set(resetCount);
 }
 
-export function updateNewListSong(song) {
+export function updateNewList() {
   return dispatch => {
     const newSongListRef = Firebase.database().ref("newSongList");
     newSongListRef.on("value", (snapshot) => {
-      dispatch({
-        type: types.UPDATE_NEW_LIST_SONG,
-        payload: snapshot.val()
-      });
+      // dispatch();
     });
+  }
+}
+
+export function setNewListSongs(song) {
+  return {
+    type: types.UPDATE_NEW_LIST_SONG,
+    payload: { song }
   }
 }
 

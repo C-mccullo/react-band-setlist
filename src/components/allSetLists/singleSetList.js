@@ -11,15 +11,15 @@ function SingleSetList(props) {
 
 	return (
 		<article className="singleSetList column is-one-third">
+			<span className="singleSetList_delete"
+				onClick={() => props.deleteList(setList.id)}>
+				<i className="fa fa-times"></i>
+			</span>
 			<ol>
 			{ songList }
 			</ol>
-			<button className="button primary" onClick={ stampSetList } >Use this setList</button>
-			<span className="singleSetList_delete" 
-				onClick={()=> props.onDeleteList(setList.id)}>
-				<i className="fa fa-times"></i>
-			</span>
-			<span>{ props.used ? "used"  : null }</span>
+			<button className="button primary" onClick={ ()=> props.useSetList(setList.id) } >Use this setList</button>
+			<span>{ props.setList.used ? `used on: ${setList.timeStamp}`  : "not yet used" }</span>
 		</article>
 	)
 }

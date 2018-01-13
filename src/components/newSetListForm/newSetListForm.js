@@ -47,8 +47,8 @@ class NewSetListForm extends Component {
 			<section>
 			<article className="new_setList">
 					<ol>
-					{ typeof(this.state.songList) !== 'undefined' ?
-						this.state.songList.map((song, index) => {
+					{ typeof(this.props.songList) !== 'undefined' ?
+						this.props.songList.map((song, index) => {
 							return (
 								<li className="setList_item" key={ index } id={ `song-${index}` }> 
 									<p>{song}</p>
@@ -69,7 +69,7 @@ class NewSetListForm extends Component {
 						className="input setList_input__text"
 						type="text"
 						placeholder="type in the name of a song"
-						value={this.state.newSong}
+						value={this.props.newSong}
 						onChange={e => this.props.actions.updateNewListSong(e.target.value) }
 						maxLength={35}
 					/>
@@ -104,7 +104,7 @@ function mapDispatchToProps(dispatch) {
 			updateNewListSong: newSetListActions.updateNewListSong,
 			addSongToList: newSetListActions.addSongToList,
 			removeSongFromList: newSetListActions.removeSongFromList
-		})
+		}, dispatch)
 	}
 }
 

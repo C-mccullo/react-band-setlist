@@ -1,7 +1,7 @@
 import * as types from "./types";
 
 const initialState = {
-  newsetList: {
+  newSetList: {
     newSong: "",
     songList: [],
     used: false,

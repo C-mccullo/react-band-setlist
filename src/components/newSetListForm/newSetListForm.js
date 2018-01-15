@@ -8,58 +8,42 @@ import * as newSetListActions from "./actions";
 class NewSetListForm extends Component {
 	constructor(props) {
 		super(props);
+		this.submitSong = this.submitSong.bind(this);
+		this.handleChange = this.handleChange.bind(this);
 	}
-	// updateNewListSong
-		// onInputChange(song) {
-		// 	this.setState({ newSong: song });
-		// }
-	// addSongToList
-		// updateList(e) {
-		// 	e.preventDefault();
-		// 	const newSong = this.state.newSong;
-		// 	const newSongList = this.state.songList;
-		// 	if (newSong !== "" ) {
-		// 		let updatedSongList = newSongList.concat(newSong);
-		// 		this.setState({ newSong: "", songList: updatedSongList });
-		// 	}
-		// }
-	// addToSetLists (in allSetListsReducer)
-		// addSetList(e) {
-		// 	e.preventDefault();
-		// 	const newSongList = this.state.songList;
-		// 	if (newSongList <= 0) {
-		// 		window.alert("Ooops! Please add some songs to your new song list");
-		// 	} else {
-		// 		this.props.onAddSetList(this.state);
-		// 		this.resetList();
-		// 	}
-		// }
-	// removeSongFromList
-		// removeSong(index) {
-		// 	const songIndex = index
-		// 	const newSongList = this.state.songList;
-		// 	newSongList.splice(songIndex, 1);
-		// 	this.setState({ songList: newSongList });
-		// }
+
+	componentDidMount() {
+		console.log(this.props.newSetList)
+	}
+
+	handleChange(e) {
+		this.props.actions.updateNewSong(e.target.value)
+	}
+	
+	submitSong(e) {
+		e.preventDefault();
+		this.props.actions.addSongToList()
+	}
 	
 	render() {
 		return(
 			<section>
 			<article className="new_setList">
 					<ol>
-					{ typeof(this.props.songList) !== 'undefined' ?
-						this.props.songList.map((song, index) => {
+					{ typeof(this.props.newSetList.songList) !== 'undefined' ?
+						Object.keys(this.props.newSetList.songList).map((key, index) => {
 							return (
-								<li className="setList_item" key={ index } id={ `song-${index}` }> 
-									<p>{song}</p>
-									<i className="fa fa-times delete-song" onClick={e => this.props.actions.removeSongFromList(index) }></i>
+								<li className="setList_item" key={ key } id={ `song-${index}` }> 
+									<p>{this.props.newSetList.songList[key] }</p>
+									<i className="fa fa-times delete-song" onClick={() => this.props.actions.removeSongFromList(key) }></i>
 								</li>
 							)
 						}) : null
 					}
 					</ol>
 					<button className="button setList_btn__push" type="submit" onClick={ this.addSetList }>Submit New List</button>
-					<button className="button setList_btn__reset" onClick={ this.props.actions.resetNewListForm }>
+					<button className="button setList_btn__reset" 
+						onClick={ this.props.actions.resetNewListForm }>
 						Reset this list
 					</button>
 				</article>
@@ -68,16 +52,15 @@ class NewSetListForm extends Component {
 					<input
 						className="input setList_input__text"
 						type="text"
-						placeholder="type in the name of a song"
-						value={this.props.newSong}
-						onChange={e => this.props.actions.updateNewListSong(e.target.value) }
+						value={this.props.newSetList.newSong}
+						onChange={ this.handleChange }
 						maxLength={35}
 					/>
 					<input 
 						className="button setList_input__submit"
 						type="submit" 
 						value="add song" 
-						onClick={this.props.actions.addSongToList }
+						onClick={(e)=>  this.submitSong(e) }
 					/>
 				</form>
 			</section>
@@ -86,22 +69,24 @@ class NewSetListForm extends Component {
 }
 
 function mapStateToProps(state) {
+	console.log("newSetListForm state", state);
 	return {
 		newSetList: {
-			newSong: state.newSetList.newSetList.newSong,
-			songList: state.newSetList.newSetList.songList, 
-			used: state.newSetList.newSetList.used, 
-			timeStamp: state.newSetList.newSetList.timeStamp,
+			newSong: state.newListForm.newSetList.newSong,
+			songList: state.newListForm.newSetList.songList, 
+			used: state.newListForm.newSetList.used, 
+			timeStamp: state.newListForm.newSetList.timeStamp,
 		},
-		newPostCount: state.newSetList.newPostCount
+		newPostCount: state.newListForm.newPostCount
 	}
 }
 
 function mapDispatchToProps(dispatch) {
 	return {
 		actions: bindActionCreators({
+			fetchNewList: newSetListActions.fetchNewList,
 			resetNewListForm: newSetListActions.resetNewListForm,
-			updateNewListSong: newSetListActions.updateNewListSong,
+			updateNewSong: newSetListActions.updateNewSong,
 			addSongToList: newSetListActions.addSongToList,
 			removeSongFromList: newSetListActions.removeSongFromList
 		}, dispatch)

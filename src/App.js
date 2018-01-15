@@ -29,13 +29,14 @@ class App extends Component {
   }
 
   componentDidMount() {
+    // get LOGIN info from firebase
+    this.props.actions.getUser();
     // get the SETLISTS from firebase on componentDidMount
     this.props.actions.fetchSetLists();
     // get the COUNT info from firebase
-    this.props.actions.fetchCount()
-      
-    // get LOGIN info from firebase
-    this.props.actions.getUser()
+    this.props.actions.fetchCount();
+    // get the newSetList from firebase
+    // this.props.actions.fetchNewList();
   }
 
   render() {
@@ -43,36 +44,23 @@ class App extends Component {
     return (
       <div className="container">
         <Header currentUser={ this.props.currentUser } count={ this.props.count } login={ this.props.actions.login } logout={ this.props.actions.logout }/>
-        
-        <LoginModal currentUser={this.props.currentUser} login={this.props.actions.login} logout={this.props.actions.logout} />
 
-        <NewSetListForm isAuthenticated={isAuthenticated} 
-          addSetList={this.props.actions.addSetList}/>
-
-        <AllSetLists isAuthenticated={isAuthenticated} setLists={this.props.setLists} />
-
-        {/* <GenerateNewList isAuthenticated={isAuthenticated}
-          addSetList={this.props.actions.addSetList} setLists={this.props.setLists}/> */}
-
-        {/* <Switch>
+        <Switch>
           <ReqAuth isAuthenticated={ isAuthenticated } exact path="/" 
-            component={ NewSetListForm } addSetList={ this.props.actions.addSetList }
+            component={NewSetListForm} newSetList={this.props.newSetList} addSetList={this.props.actions.addSetList}
           />
 
           <ReqAuth path="/setlists" isAuthenticated={ isAuthenticated } 
-            component={ AllSetLists } useSetList={ this.useSetList } 
-            onReset={ this.props.actions.resetCount } count={ this.props.count } 
-            setLists={ this.props.setLists } onDeleteList={this.props.actions.deleteSetList}
-          />
+            component={ AllSetLists } setLists={ this.props.setLists } />
 
-          <ReqAuth path="/generatelist" isAuthenticated={ isAuthenticated }
+          {/* <ReqAuth path="/generatelist" isAuthenticated={ isAuthenticated }
             component={GenerateNewList} addSetList={ this.props.actions.addSetList } setLists={ this.props.setLists } 
-          />
+          /> */}
           <Route path="/login"
             render={ (props) => <LoginModal currentUser={ this.props.currentUser } login={ this.props.actions.login } logout={ this.props.actions.logout } /> }
           />
           <Route path="/*" render={ ()=> <NotFound/> }/>
-        </Switch> */}
+        </Switch>
         
         <Footer/>
       </div>
@@ -83,7 +71,8 @@ class App extends Component {
 function mapStateToProps(state) {
   return {
     currentUser: state.currentUser.currentUser,
-    setLists: state.setLists.setLists
+    setLists: state.setLists.setLists,
+    newListForm: state.newListForm.newSetList
   }
 }
 
@@ -95,13 +84,14 @@ function mapDispatchToProps(dispatch) {
       deleteSetList: setListFormActions.deleteSetList,
       fetchCount: setListFormActions.getCount,
       getUser: loginActions.getUser,
+      fetchNewList: setListFormActions.fetchNewList,
       login: loginActions.loginUser,
       logout: loginActions.logoutUser,
     }, dispatch)
   }
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(App);
+)(App));

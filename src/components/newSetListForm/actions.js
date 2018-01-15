@@ -1,77 +1,131 @@
 // setListForm
-import Firebase from "../../firebase";
+import * as firebase from "../../firebase";
+import fetchSetLists from "../allSetLists/actions"
 import * as types from "./types";
-
-export function addSetList(setList) {
-  const setListsRef = Firebase.database().ref("setLists");
-  //upon push of setlist, setListRef.on("value") callback will be called 
-  // in allSetLists component reducer  
-  return dispatch => setListsRef.push(setList);
-}
 
 export function getCount() {
   return dispatch => {
-    const countRef = Firebase.database().ref("count");
-    countRef.on("value", (snapshot) => {
-      dispatch({
-        type: types.GET_COUNT,
-        payload: snapshot.val()
-      });
-    });
+    firebase.fetchNewListCount()
+      .then((snap) => {
+        console.log("fetchNewListCount", snap.val())
+        dispatch({
+          type: types.FETCH_COUNT,
+          payload: {
+            count: snap.val()
+          }
+        })
+      })
   }
 }
 
 export function addCount() {
-  const countRef = Firebase.database().ref("count");
-  const newCount = countRef + 1;
-  dispatch => {
-    countRef.transaction(function(count) {
-      return (count || 0) + 1;
-    })
-  }
+
 }
 
 export function resetCount() {
-  const resetCount = 0;
-  const countRef = Firebase.database().ref("count");
-  return dispatch => countRef.set(resetCount);
+
 }
 
-export function updateNewList() {
+export function addSetList(setList) {
+  //upon push of setlist, setListRef.on("value") callback will be called 
+  // in allSetLists component reducer  
   return dispatch => {
-    const newSongListRef = Firebase.database().ref("newSongList");
-    newSongListRef.on("value", (snapshot) => {
-      // dispatch();
-    });
+    firebase.pushNewListToSetLists()
+      .then((snap) => {
+        console.log(snap.val())
+        dispatch(fetchSetLists())
+      })
+      .then(() => {
+        dispatch(resetNewListForm())
+      })
   }
 }
 
-export function setNewListSongs(song) {
-  return {
-    type: types.UPDATE_NEW_LIST_SONG,
-    payload: { song }
+export function fetchNewList() {
+  return dispatch => {
+    firebase.fetchNewSetList()
+      .then((snap) => {
+        dispatch({
+          type: types.FETCH_NEW_LIST,
+          payload: {
+            newSetList: snap.val()
+          }
+        })
+      })
   }
 }
 
-export function resetNewListForm(songlist) {
-  const newSongListRef = Firebase.database().ref("newSongList");
-  const resetNewSongListState = {
-    newSong: "",
-    songList: [],
-    used: false,
-    timeStamp: ""
+export function updateNewSong(song) {
+  return dispatch => {
+    firebase.updateNewSong(song)
+      .then((snap) => {
+        console.log("updateNewSong", snap.val())
+        dispatch({
+          type: types.UPDATE_NEW_LIST,
+          payload: { 
+            newSetList: snap.val() 
+          }
+        })
+      })
   }
-  return dispatch => newSongListRef.update(resetNewSongListState);
+}
+
+export function resetNewListForm() {
+  return dispatch => {
+    firebase.resetNewList()
+      .then((snap) => {
+        console.log("resetNewList", snap.val())
+        dispatch({
+          type: types.RESET_NEW_LIST,
+          payload: {
+            newSetList: snap.val()
+          }
+        })
+      })
+  }
 }
 
 export function addSongToList() {
-  const newSongListRef = Firebase.database().ref("newSongList");
-  const newSongValue = newSongListRef.child("newSong").val();
-  return dispatch => newSongListRef.child("songList").push(newSongValue);
+  return dispatch => {
+    firebase.pushNewSongToSongList()
+      .then((snap) => {
+        console.log("pushNewSongToList", snap.val())
+        dispatch({
+          type: types.PUSH_SONG_TO_NEW_LIST,
+          payload: {
+            newSetList: snap.val()
+          }
+        })
+      })
+  }
+}
+
+export function resetNewSongState() {
+  return dispatch => {
+    firebase.updateNewSong("")
+      .then((snap) => {
+        console.log("resetNewSongState", snap.val())
+        dispatch({
+          type: types.RESET_NEW_SONG,
+          payload: {
+            newSetList: snap.val()
+          }
+        })
+      })
+  }
 }
 
 export function removeSongFromList(song) {
-  const songListRef = Firebase.database().ref("newSongList").child("songList");
-  console.log(songListRef.equalTo(song));
-  return dispatch => songListRef.equalTo(song).remove();
+  return dispatch => {
+    firebase.removeSongFromNewList()
+      .then((snap) => {
+        console.log("removeSongFromList", snap.val())
+        dispatch({
+          type: types.REMOVE_SONG_FROM_LIST,
+          payload: {
+            newSetList: snap.val()
+          }
+        })
+      })
+  }
 }

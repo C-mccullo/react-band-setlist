@@ -3,15 +3,11 @@ import SingleSetList from './singleSetList';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as setListActions from "./actions";
-import * as setListFormActions from "../setListForm/actions";
+import * as setListFormActions from "../newSetListForm/actions";
 
 class AllSetLists extends React.Component {
 	constructor(props) {
 		super(props)
-	}
-
-	componentDidMount() {
-		// this.props.actions.fetchSetLists();
 	}
 
 	render() {
@@ -21,12 +17,12 @@ class AllSetLists extends React.Component {
 				<h3>New Lists</h3>
 				<section className="columns">
 				{ 
-					this.props.setLists.map((setList, id) => {
+					Object.keys(this.props.setLists).map((key, id) => {
 						return (
-							<SingleSetList key={id}
-								id={id} 
+							<SingleSetList key={key}
+								id={key} 
 								useSetList={ this.props.actions.useSetList } 
-								setList={ this.props.setLists[id] }
+								setList={ this.props.setLists[key] }
 								deleteList={ this.props.actions.deleteList }/>
 						)
 					}) 

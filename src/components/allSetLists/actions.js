@@ -1,47 +1,76 @@
-import Firebase from "../../firebase";
+import * as firebase from "../../firebase";
 import * as types from "./types";
 
 export function fetchSetLists() {
   return dispatch => {
-    const setListsRef = Firebase.database().ref("setLists");
-    setListsRef.on('value', (snapshot) => {
-      const items = snapshot.val();
-      let setLists = [];
-
-      for (let item in items) {
-        const value = items[item]
-        const parcel = {
-          id: item,
-          songList: value.songList,
-          used: value.used,
-          timeStamp: value.timeStamp
-        }
-        setLists.push(parcel);
-      }
-      dispatch(setSetLists(setLists));
+    dispatch({
+      type: types.LOADING_SETLISTS,
     })
-  }
-}
-
-export function setSetLists(setLists) {
-  // console.log("setlists in action creator", setLists);
-  return {
-    type: types.SET_SETLISTS,
-    payload: {
-      setLists
-    }
+    firebase.fetchSetLists()
+      .then(snap => {
+        dispatch({
+          type: types.SET_SETLISTS,
+          payload: {
+            setLists: snap.val()
+          }
+        })
+      })
+      .then(()=> {
+        dispatch({
+          type: types.LOADED_SETLISTS,
+        })
+      })
+      .catch(err => {
+        dispatch({
+          type: types.ERROR_SETLISTS,
+          payload: {
+            error: err
+          }
+        })
+      })
   }
 }
 
 export function deleteSetList(setList) {
-  const setListRef = Firebase.database().ref("setLists").child(setList);
-  console.log(setListRef);
-  return dispatch => setListRef.remove();
+  console.log("deleteListAction", setList);
+  return dispatch => {
+    firebase.deleteSetList(setList)
+      .then(snap => {
+        dispatch({
+          type: DELETED_SETLIST,
+          payload: snap.val()
+        })
+      })
+      .catch(err => {
+        dispatch({
+          type: types.ERROR_SETLISTS,
+          payload: {
+            error: err
+          }
+        })
+      })
+  }
 }
 
 export function useSetList(setList) {
-  const timeStamp = (new Date()).getTime().toString();
-  // console.log("setlist to be updated", setList);
-  const setListRef = Firebase.database().ref("setLists").child(setList);
-  return dispatch => setListRef.update({ timeStamp: timeStamp, used: true });
+  return dispatch => {
+    firebase.addTimeStampToSetList(setList)
+    .then(snap => {
+      // console.log(snap)
+      dispatch({
+        type: types.ADDED_TIMESTAMP_TO_SETLIST,
+        payload: { 
+          setLists: snap.val() 
+        }
+      })
+      })
+      .then(err => {
+        dispatch({
+          type: types.ERROR_SETLISTS,
+          payload: {
+            error: err
+          }
+        })
+      })
+  }
 }

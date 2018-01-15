@@ -1,9 +1,10 @@
 import * as types from "./types";
 
+// newSetListForm
 const initialState = {
   newSetList: {
     newSong: "",
-    songList: [],
+    songList: {},
     used: false,
     timeStamp: ""
   },
@@ -12,21 +13,26 @@ const initialState = {
 
 export default function newSetListFormReducer(state = initialState, action) {
   switch(action.type) {
-    case types.GET_COUNT: {
+    case types.FETCH_COUNT: {
       return {
         ...state,
         newPostCount: action.payload.count
       }
     }
 
-    case types.UPDATE_NEW_LIST_SONG: {
-      const listState = {...state};
-      const stateWithNewSong = listState.newSong = action.payload.song;
+    case types.UPDATE_NEW_LIST: {
+      console.log("UPDATE_NEW_LIST payload", action.payload);
       return {
-        stateWithNewSong
+        ...state,
+        newSetList: action.payload
       }
     }
-
+    case types.RESET_NEW_SONG: {
+      return {
+        ...state,
+         
+      }
+    }
     default: {
       return state;
     }

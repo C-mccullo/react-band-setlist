@@ -5,27 +5,7 @@ import App from './App';
 import { Provider } from 'react-redux';
 import { createStore, compose, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import rootReducer from './rootReducer';
-
-const defaultState = {
-	// setLists: [
-	// 	/* {
-	//		id: ""
-	// 		songList: [],
-	// 		used: false,
-	// 		timeStamp: ""
-	// 	} */
-	// ],
-	// newsetList: {
-	// 	newSong: "",
-	// 	songList: [],
-	// 	used: false,
-	// 	timeStamp: ""
-	// },
-	// newPostCount: 0,
-	// login: false,
-	// currentUser: null
-}
+import rootReducer, { defaultState } from './rootReducer';
 
 const store = createStore(rootReducer, defaultState, compose(
 	applyMiddleware(thunkMiddleware),

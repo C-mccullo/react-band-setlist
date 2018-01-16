@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
+import { reducer as formReducer } from "redux-form";
 import setListsReducer from "./components/allSetLists/reducer";
-// import { navigationReducer } from "./components/common/reducer";
 import newSetListFormReducer from "./components/newSetListForm/reducer";
 import loginReducer from "./components/login/reducer";
 import generateSetListReducer from "./components/setListGenerator/reducer";
@@ -37,7 +37,8 @@ const rootReducer = combineReducers({
   newListForm: newSetListFormReducer,
   setLists: setListsReducer,
   currentUser: loginReducer,
-  generateList: generateSetListReducer
+  generateList: generateSetListReducer,
+  form: formReducer
 })
 
 export default rootReducer;

@@ -9,7 +9,8 @@ form input.setList_input__text {
 	margin-right: 10px;
 }
 
-form input.setList_input__submit {
+form button.setList_input__submit {
+	display: inline-block;
 	background-color: aquamarine;
 	width: 190px;
 }

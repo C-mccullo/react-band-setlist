@@ -21,7 +21,7 @@ config = {
       // JS
       {
         test: /\.js$/,
-        exclude: [ /node_modules/, "index.1.js"],
+        exclude: [ /node_modules/, "newSetListForm.1.js"],
         include: path.join(__dirname, "src"),
         loader: "babel-loader"
       },

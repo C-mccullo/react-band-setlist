@@ -47,7 +47,7 @@ class App extends Component {
 
         <Switch>
           <ReqAuth isAuthenticated={ isAuthenticated } exact path="/" 
-            component={NewSetListForm} newSetList={this.props.newSetList} addSetList={this.props.actions.addSetList}
+            component={NewSetListForm}
           />
 
           <ReqAuth path="/setlists" isAuthenticated={ isAuthenticated } 
